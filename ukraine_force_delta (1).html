@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UFD — Ukraine Force Delta</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Barlow:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ukraine-blue: #005BBB;
+  --ukraine-yellow: #FFD500;
+  --bg: #0a0c0a;
+  --bg2: #0e110e;
+  --bg3: #131613;
+  --bg4: #181c18;
+  --bg5: #1e231e;
+  --green: #3a7d44;
+  --green-bright: #4caf60;
+  --green-dim: #2a5a32;
+  --green-glow: rgba(76,175,96,0.12);
+  --amber: #e8a020;
+  --amber-dim: #8a5c10;
+  --red: #c0392b;
+  --red-dim: #7a1c12;
+  --text: #c8d4c0;
+  --text-dim: #6a7a64;
+  --text-mute: #3a4035;
+  --border: rgba(76,175,96,0.2);
+  --border-dim: rgba(76,175,96,0.07);
+  --yellow-line: rgba(255,213,0,0.6);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ── SCANLINE ── */
+.scanline {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green-bright);
+  animation: scan 2s ease-out forwards;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 12px var(--green-bright);
+}
+@keyframes scan {
+  0% { transform: translateY(0); opacity: 0.7; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: relative;
+  padding: 0;
+  border-bottom: 2px solid var(--ukraine-yellow);
+  overflow: hidden;
+  background: var(--bg2);
+}
+
+.header-stripe {
+  height: 6px;
+  background: linear-gradient(90deg, var(--ukraine-blue) 50%, var(--ukraine-yellow) 50%);
+}
+
+.header-inner {
+  padding: 50px 2rem 40px;
+  position: relative;
+  text-align: left;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+}
+
+.header-bg-text {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Oswald', sans-serif;
+  font-size: 10rem;
+  font-weight: 700;
+  color: rgba(76,175,96,0.04);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.header-left {}
+
+.header-classification {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-classification::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.site-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.site-title span {
+  color: var(--ukraine-yellow);
+}
+
+.site-subtitle {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-dim);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.header-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.hm-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+}
+
+.hm-item span {
+  color: var(--green-bright);
+}
+
+.header-emblem {
+  width: 120px;
+  height: 120px;
+  border: 2px solid var(--ukraine-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.header-emblem::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255,213,0,0.3);
+}
+
+.emblem-letters {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--ukraine-yellow);
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+.emblem-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,12,10,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-dim);
+  border-top: 1px solid var(--border-dim);
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  gap: 0;
+}
+
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 13px 18px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+nav a:hover {
+  color: var(--ukraine-yellow);
+  border-bottom-color: var(--ukraine-yellow);
+}
+
+/* ── LAYOUT ── */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.section-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--green-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-eyebrow::before {
+  content: '//';
+  color: var(--ukraine-yellow);
+}
+
+.section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+p { margin-bottom: 1rem; font-size: 0.92rem; }
+
+/* ── STATUS GRID ── */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-dim);
+  border: 1px solid var(--border-dim);
+  margin-bottom: 2rem;
+}
+
+.stat-cell {
+  background: var(--bg2);
+  padding: 18px 20px;
+  position: relative;
+}
+
+.stat-cell::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--ukraine-yellow);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.stat-cell:hover::before { opacity: 1; }
+
+.stat-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+
+.stat-value.green { color: var(--green-bright); }
+.stat-value.yellow { color: var(--ukraine-yellow); }
+.stat-value.red { color: var(--red); }
+
+/* ── BLOCKQUOTE ── */
+blockquote {
+  position: relative;
+  margin: 2rem 0;
+  padding: 18px 24px 18px 40px;
+  border-left: 3px solid var(--ukraine-yellow);
+  background: linear-gradient(90deg, rgba(255,213,0,0.04) 0%, transparent 100%);
+}
+
+blockquote::before {
+  content: '"';
+  position: absolute;
+  left: 10px; top: 8px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  color: var(--ukraine-yellow);
+  opacity: 0.4;
+  line-height: 1;
+}
+
+blockquote p {
+  font-style: italic;
+  color: var(--text);
+  font-size: 0.9rem;
+  margin: 0 0 6px;
+}
+
+blockquote cite {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  font-style: normal;
+}
+
+/* ── UNIT CARDS ── */
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border-dim);
+  border: 1px solid var(--border-dim);
+  margin: 2rem 0;
+}
+
+.unit-card {
+  background: var(--bg2);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+
+.unit-card:hover { background: var(--bg3); }
+
+.unit-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle at 100% 100%, rgba(255,213,0,0.05) 0%, transparent 70%);
+}
+
+.uc-code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--green-dim);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.uc-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ukraine-yellow);
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.uc-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+
+/* ── TIMELINE ── */
+.timeline { margin: 12px 0; }
+
+.tl-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.tl-year {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--ukraine-yellow);
+  font-weight: 500;
+}
+
+/* ── OPS BLOCK (incidents) ── */
+.op-block {
+  border: 1px solid var(--border-dim);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.op-block:hover { border-color: var(--border); }
+
+.op-head {
+  padding: 14px 18px;
+  background: var(--bg2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.op-head:hover { background: var(--bg3); }
+
+.op-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-mute);
+  flex-shrink: 0;
+  min-width: 70px;
+}
+
+.op-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.op-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.badge-green { background: rgba(58,125,68,0.25); color: var(--green-bright); border: 1px solid rgba(76,175,96,0.2); }
+.badge-red { background: rgba(139,28,28,0.25); color: #e05050; border: 1px solid rgba(192,57,43,0.2); }
+.badge-amber { background: rgba(130,80,10,0.25); color: var(--amber); border: 1px solid rgba(232,160,32,0.2); }
+.badge-blue { background: rgba(0,91,187,0.25); color: #6ab0ff; border: 1px solid rgba(0,91,187,0.3); }
+
+.op-body {
+  display: none;
+  padding: 18px 20px;
+  border-top: 1px solid var(--border-dim);
+  background: var(--bg);
+  font-size: 0.83rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+}
+
+.op-body.open { display: block; }
+
+/* ── INFO GRID (2-col) ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border-dim);
+  border: 1px solid var(--border-dim);
+  margin: 1rem 0 1.5rem;
+}
+
+.ig-cell {
+  background: var(--bg2);
+  padding: 16px 18px;
+}
+
+.ig-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.ig-value {
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.ig-value.green { color: var(--green-bright); }
+.ig-value.yellow { color: var(--ukraine-yellow); }
+.ig-value.red { color: var(--red); }
+
+/* ── DIVISION BLOCK ── */
+.div-block {
+  border: 1px solid var(--border-dim);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.div-header {
+  background: var(--bg3);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.div-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ukraine-yellow);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.div-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+.div-body {
+  padding: 14px 18px;
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* ── SPEC LIST ── */
+.spec-list { margin: 1rem 0; }
+
+.spec-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.spec-key {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--green-bright);
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+
+.spec-val {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* ── TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  margin: 1.5rem 0;
+}
+
+.data-table th {
+  background: var(--bg3);
+  padding: 10px 14px;
+  text-align: left;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-dim);
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.data-table tr:hover td { background: rgba(76,175,96,0.03); }
+
+/* ── PILL ── */
+.pill {
+  display: inline-block;
+  background: rgba(76,175,96,0.1);
+  border: 1px solid var(--border);
+  color: var(--green-bright);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.pill.yellow {
+  background: rgba(255,213,0,0.08);
+  border-color: rgba(255,213,0,0.25);
+  color: var(--ukraine-yellow);
+}
+
+.pill.blue {
+  background: rgba(0,91,187,0.12);
+  border-color: rgba(0,91,187,0.3);
+  color: #6ab0ff;
+}
+
+/* ── MISSION CARD ── */
+.mission-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+  margin: 1.5rem 0;
+}
+
+.mission-item {
+  background: var(--bg2);
+  border: 1px solid var(--border-dim);
+  padding: 16px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.mission-item:hover {
+  border-color: var(--ukraine-yellow);
+  background: var(--bg3);
+}
+
+.mi-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.2rem;
+  color: rgba(255,213,0,0.25);
+  line-height: 1;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.mi-text {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── DEVIZE BANNER ── */
+.devize {
+  background: var(--bg3);
+  border: 1px solid var(--ukraine-yellow);
+  border-left: 4px solid var(--ukraine-yellow);
+  padding: 20px 28px;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.devize-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--ukraine-yellow);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.devize-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--text-mute);
+  margin-top: 4px;
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 50px 2rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.footer-logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ukraine-yellow);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.footer-code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-mute);
+  letter-spacing: 2px;
+}
+
+.footer-stripe {
+  height: 4px;
+  background: linear-gradient(90deg, var(--ukraine-blue) 50%, var(--ukraine-yellow) 50%);
+  margin-top: 30px;
+}
+
+/* ── GOLD DIVIDER ── */
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,213,0,0.3), transparent);
+  margin: 2.5rem 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .status-grid { grid-template-columns: repeat(2, 1fr); }
+  .info-grid { grid-template-columns: 1fr; }
+  .header-inner { grid-template-columns: 1fr; }
+  .header-emblem { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-stripe"></div>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-classification">⚠ Совершенно секретно — Уровень допуска «Дельта»</div>
+      <h1 class="site-title">UKRAINE FORCE <span>DELTA</span></h1>
+      <p class="site-subtitle">UFD · Секретное многонациональное оперативное подразделение</p>
+      <div class="header-meta">
+        <div class="hm-item">Статус: <span>АКТИВНО</span></div>
+        <div class="hm-item">Основано: <span>2029</span></div>
+        <div class="hm-item">Командование: <span>УКРАИНА</span></div>
+        <div class="hm-item">Для гражданских: <span>НЕ СУЩЕСТВУЕТ</span></div>
+      </div>
+    </div>
+    <div class="header-emblem">
+      <div class="emblem-letters">UFD</div>
+      <div class="emblem-sub">FORCE DELTA</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#overview">// Обзор</a>
+  <a href="#mission">// Миссия</a>
+  <a href="#divisions">// Подразделения</a>
+  <a href="#timeline">// Хронология</a>
+  <a href="#ops">// Операции</a>
+  <a href="#tech">// Технологии</a>
+</nav>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="section-eyebrow">Досье · Происхождение и природа</div>
+    <h2 class="section-title">Украинские Силы «Дельта»</h2>
+
+    <div class="status-grid">
+      <div class="stat-cell">
+        <div class="stat-label">Статус</div>
+        <div class="stat-value green">Активно · Засекречено</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Уровень допуска</div>
+        <div class="stat-value red">«Дельта» · Выше ЦРУ/СБУ</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Командование</div>
+        <div class="stat-value yellow">Украинский Генштаб · напрямую</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Дислокация</div>
+        <div class="stat-value">Скрытые объекты · Украина</div>
+      </div>
+    </div>
+
+    <p>В тени рушащегося мира, где хаос, коррупция и неизвестные аномалии распространились по Восточной Европе, была создана секретная военная организация под кодовым названием <strong style="color:#fff;">UFD — Ukraine Force Delta</strong>.</p>
+
+    <p>Созданная после серии секретных инцидентов вблизи заброшенных военных зон и подземных лабораторий, UFD стала элитным многонациональным оперативным подразделением, действующим под украинским командованием. Организация набирает только лучших: ветеранов спецназа, агентов разведки, учёных, операторов беспилотников, экспертов по кибервойне.</p>
+
+    <p>UFD действует из скрытых объектов по всей Украине, используя передовые технологии, экспериментальное оружие и тактические отряды для реагирования на опасные аномалии, террористические группы, отколовшиеся ополчения и неопознанных существ.</p>
+
+    <div class="devize">
+      <div>
+        <div class="devize-text">«В тишине мы наносим удар»</div>
+        <div class="devize-sub">Девиз UFD · Засекречено · 2029 — н.в.</div>
+      </div>
+    </div>
+
+    <div class="units-grid" style="grid-template-columns: repeat(3,1fr);">
+      <div class="unit-card">
+        <div class="uc-code">Репутация · Гражданские</div>
+        <div class="uc-name">Не существует</div>
+        <div class="uc-desc">Для гражданского населения UFD — это миф. Организация официально не признана ни одним государством.</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-code">Репутация · Враги</div>
+        <div class="uc-name">Кошмар</div>
+        <div class="uc-desc">Противники, столкнувшиеся с UFD, либо не возвращаются, либо не помнят ничего о произошедшем.</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-code">Репутация · Союзники</div>
+        <div class="uc-name">Последняя линия</div>
+        <div class="uc-desc">Когда стандартные военные и спецслужбы бессильны — вызывают UFD. Они — финальный барьер между человечеством и тем, что скрыто.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="container">
+    <div class="section-eyebrow">Директива · Основные задачи</div>
+    <h2 class="section-title">Миссия и Цели</h2>
+
+    <p>Миссия UFD сформулирована в трёх словах, но за каждым стоит бесчисленное количество операций, жертв и засекреченных файлов:</p>
+
+    <div class="units-grid" style="grid-template-columns: repeat(3,1fr); margin: 1.5rem 0;">
+      <div class="unit-card">
+        <div class="uc-code">Директива I</div>
+        <div class="uc-name">Защищать</div>
+        <div class="uc-desc">Защищать человечество от угроз, которые оно не способно ни увидеть, ни понять.</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-code">Директива II</div>
+        <div class="uc-name">Устранять</div>
+        <div class="uc-desc">Устранять угрозы любыми доступными средствами. Протоколы взаимодействия засекречены.</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-code">Директива III</div>
+        <div class="uc-name">Скрывать</div>
+        <div class="uc-desc">Скрывать правду от общества. Паника — враг порядка. Порядок — условие выживания.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-eyebrow" style="margin-top: 0;">Оперативные задачи · Детальный список</div>
+
+    <div class="mission-list">
+      <div class="mission-item">
+        <div class="mi-num">01</div>
+        <div class="mi-text">Обеспечить безопасность аномальных зон по всей территории Украины и сопредельных государств</div>
+      </div>
+      <div class="mission-item">
+        <div class="mi-num">02</div>
+        <div class="mi-text">Предотвратить глобальную панику путём полного засекречивания аномальных инцидентов</div>
+      </div>
+      <div class="mission-item">
+        <div class="mi-num">03</div>
+        <div class="mi-text">Вернуть и каталогизировать секретные артефакты, обнаруженные в ходе полевых операций</div>
+      </div>
+      <div class="mission-item">
+        <div class="mi-num">04</div>
+        <div class="mi-text">Нейтрализовать враждебные структуры: террористов, культы, незаконные военные формирования</div>
+      </div>
+      <div class="mission-item">
+        <div class="mi-num">05</div>
+        <div class="mi-text">Защитить территорию Украины от скрытых угроз — биологических, аномальных, кибернетических</div>
+      </div>
+      <div class="mission-item">
+        <div class="mi-num">06</div>
+        <div class="mi-text">Проводить международные тайные операции по запросу командования или союзников</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISIONS -->
+<section id="divisions">
+  <div class="container">
+    <div class="section-eyebrow">Структура · Боевой состав</div>
+    <h2 class="section-title">Внутренние Подразделения</h2>
+
+    <p>UFD состоит из пяти специализированных подразделений. Каждое обучено для конкретного типа угроз. Взаимодействие между подразделениями — только на уровне оперативной необходимости.</p>
+
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Штурмовое Подразделение «Дельта»</span>
+        <span class="div-tag">SAD · Передовые операторы</span>
+      </div>
+      <div class="div-body">
+        Основная ударная сила UFD. Передовые боевые операторы, подготовленные для прямого контакта с угрозами любого класса. Специализация: зачистка аномальных зон, штурм укреплённых позиций, уничтожение биологических угроз в ближнем бою. Стандартное оружие дополнено экспериментальными образцами из Отдела «Омега».
+      </div>
+    </div>
+
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Группа Разведки «Призрак»</span>
+        <span class="div-tag">GRP · Скрытное проникновение</span>
+      </div>
+      <div class="div-body">
+        Операторы «Призрака» специализируются на миссиях глубокого проникновения и тактической разведке. Они входят в зону до начала основной операции — тихо, невидимо, без следов. Их доклады формируют основу каждого оперативного плана UFD. Часть операторов имеет постоянные легенды внедрения в гражданские структуры на 3–7 лет.
+      </div>
+    </div>
+
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Отдел «Чёрная Сигнализация»</span>
+        <span class="div-tag">OCS · Кибер-операции и разведка</span>
+      </div>
+      <div class="div-body">
+        Кибернетическое крыло UFD. Ответственно за перехват коммуникаций, взлом военных и гражданских систем, создание дезинформационных кампаний и полное стирание цифровых следов операций UFD. Также занимается мониторингом аномальных сигналов в электромагнитном диапазоне и их расшифровкой.
+      </div>
+    </div>
+
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Корпус Медицинской Помощи</span>
+        <span class="div-tag">КМП · Биологические угрозы и эвакуация</span>
+      </div>
+      <div class="div-body">
+        Специализированный медицинский корпус, подготовленный не для обычных ранений, а для работы с последствиями биологических и аномальных заражений. Протоколы дезактивации, экстренная стабилизация агентов, контактировавших с неизвестными субстанциями, и поддержка выживших гражданских в зонах аномальных инцидентов.
+      </div>
+    </div>
+
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Исследовательский Отдел «Омега»</span>
+        <span class="div-tag">ИО-Ω · Исследование аномалий</span>
+      </div>
+      <div class="div-body">
+        Научное ядро UFD. Учёные «Омеги» изучают захваченные артефакты, анализируют аномальные явления и разрабатывают экспериментальное оружие на основе полученных данных. Именно «Омега» поставляет штурмовому подразделению нестандартное снаряжение. Уровень доступа к архивам — выше, чем у большинства членов Генштаба.
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Подразделение</th>
+          <th>Специализация</th>
+          <th>Численность</th>
+          <th>Статус</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill yellow">SAD</span> Штурмовое «Дельта»</td>
+          <td>Прямые боевые операции</td>
+          <td style="color:var(--text-mute);">[ЗАСЕКРЕЧЕНО]</td>
+          <td style="color:var(--green-bright);">Активно</td>
+        </tr>
+        <tr>
+          <td><span class="pill">GRP</span> Разведка «Призрак»</td>
+          <td>Скрытное проникновение и рекогносцировка</td>
+          <td style="color:var(--text-mute);">[ЗАСЕКРЕЧЕНО]</td>
+          <td style="color:var(--green-bright);">Активно</td>
+        </tr>
+        <tr>
+          <td><span class="pill blue">OCS</span> «Чёрная Сигнализация»</td>
+          <td>Кибер-операции и сигнальная разведка</td>
+          <td style="color:var(--text-mute);">[ЗАСЕКРЕЧЕНО]</td>
+          <td style="color:var(--green-bright);">Активно</td>
+        </tr>
+        <tr>
+          <td><span class="pill">КМП</span> Медицинский корпус</td>
+          <td>Биозащита и эвакуация</td>
+          <td style="color:var(--text-mute);">[ЗАСЕКРЕЧЕНО]</td>
+          <td style="color:var(--green-bright);">Активно</td>
+        </tr>
+        <tr>
+          <td><span class="pill yellow">ИО-Ω</span> Отдел «Омега»</td>
+          <td>Наука и разработка вооружений</td>
+          <td style="color:var(--text-mute);">[ЗАСЕКРЕЧЕНО]</td>
+          <td style="color:var(--amber);">Ограниченный доступ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="container">
+    <div class="section-eyebrow">Архив · Ключевые события</div>
+    <h2 class="section-title">Хронология</h2>
+
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-year">2028</div>
+        <div>
+          <strong style="color:#fff;">Первый аномальный инцидент.</strong> Вблизи заброшенных военных зон и подземных лабораторий на востоке Украины фиксируются серия необъяснимых явлений. Стандартные силовые структуры не способны их идентифицировать. Начало закрытых консультаций в Генштабе.
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-year">2029</div>
+        <div>
+          <strong style="color:#fff;">Официальное создание UFD.</strong> По итогам секретных совещаний издаётся закрытый приказ. Украинские Силы «Дельта» официально сформированы. Первые наборы операторов — ветераны АТО/ООС, бывшие сотрудники СБУ и иностранные специалисты с допуском уровня «Дельта».
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-year">2031</div>
+        <div>
+          <strong style="color:#fff;">Операция «Чёрная Буря».</strong> Первая крупная победа UFD. Подробности засекречены на уровень выше «Дельта». Известно лишь, что операция предотвратила угрозу, способную затронуть несколько европейских государств. Отдел «Омега» впервые применил экспериментальное вооружение в боевых условиях.
+        </div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-year">2033</div>
+        <div>
+          <strong style="color:#fff;">Выход на международный уровень.</strong> Расширение деятельности на международные тайные операции. UFD устанавливает закрытые каналы взаимодействия с рядом иностранных спецслужб. Группа разведки «Призрак» проводит первые внешние операции за пределами Украины.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPS -->
+<section id="ops">
+  <div class="container">
+    <div class="section-eyebrow">Архив операций · Засекречено</div>
+    <h2 class="section-title">Оперативные Файлы</h2>
+
+    <p>Ниже — частично рассекреченные оперативные сводки. Большинство деталей остаётся под грифом «Дельта». Доступ — только для авторизованного персонала UFD.</p>
+
+    <!-- OP: BLACK STORM -->
+    <div class="op-block">
+      <div class="op-head" onclick="toggle(this)">
+        <span class="op-num">ОП-2031-01</span>
+        <span class="op-title">«Чёрная Буря»</span>
+        <span class="op-badge badge-green">Успех · Угроза нейтрализована</span>
+      </div>
+      <div class="op-body">
+        <div class="info-grid">
+          <div class="ig-cell">
+            <div class="ig-label">Дата</div>
+            <div class="ig-value">2031 · Точная дата засекречена</div>
+          </div>
+          <div class="ig-cell">
+            <div class="ig-label">Класс угрозы</div>
+            <div class="ig-value red">«Омега» · Транснациональная аномалия</div>
+          </div>
+          <div class="ig-cell">
+            <div class="ig-label">Задействованы</div>
+            <div class="ig-value yellow">SAD + ИО-Ω + ОCS</div>
+          </div>
+          <div class="ig-cell">
+            <div class="ig-label">Географический охват</div>
+            <div class="ig-value">Несколько стран Восточной Европы</div>
+          </div>
+        </div>
+
+        <p>Первая крупная победа UFD. Операция стала проверкой боеспособности организации в реальных условиях. Штурмовое подразделение «Дельта» действовало совместно с Отделом «Омега», впервые применившим экспериментальное вооружение в боевых условиях.</p>
+
+        <div class="spec-list">
+          <div class="spec-item">
+            <div class="spec-key">Фаза I</div>
+            <div class="spec-val">Группа «Призрак» проводит рекогносцировку в течение 72 часов. Установлено местоположение аномального источника. Гражданское население в радиусе 15 км эвакуировано под легендой «учений».</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Фаза II</div>
+            <div class="spec-val">«Чёрная Сигнализация» глушит все коммуникации в зоне операции, перехватывает спутниковое наблюдение противника, создаёт информационный «пузырь».</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Фаза III</div>
+            <div class="spec-val">SAD входит в зону. «Омега» применяет [ДАННЫЕ УДАЛЕНЫ] против аномального источника. Угроза нейтрализована за [ЗАСЕКРЕЧЕНО] минут.</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Итог</div>
+            <div class="spec-val">Угроза устранена. Артефакты переданы в архив «Омеги». Потери среди мирного населения: ноль. Потери UFD: [ЗАСЕКРЕЧЕНО].</div>
+          </div>
+        </div>
+
+        <blockquote>
+          <p>«Мир никогда не узнает, что произошло той ночью. И это именно то, чего мы добивались.»</p>
+          <cite>— Командир SAD, послеоперационный отчёт ОП-2031-01</cite>
+        </blockquote>
+      </div>
+    </div>
+
+    <!-- OP: GHOST SIGNAL -->
+    <div class="op-block">
+      <div class="op-head" onclick="toggle(this)">
+        <span class="op-num">ОП-2033-04</span>
+        <span class="op-title">«Сигнал Призрака»</span>
+        <span class="op-badge badge-amber">Частичный успех · Артефакт утрачен</span>
+      </div>
+      <div class="op-body">
+        <div class="info-grid">
+          <div class="ig-cell">
+            <div class="ig-label">Дата</div>
+            <div class="ig-value">2033 · Первая международная операция</div>
+          </div>
+          <div class="ig-cell">
+            <div class="ig-label">Задействованы</div>
+            <div class="ig-value yellow">GRP «Призрак» + SAD</div>
+          </div>
+        </div>
+
+        <p>Первая операция UFD за пределами Украины. Группа «Призрак» получила задание вернуть артефакт класса «Дельта», похищенный неустановленной структурой и переправленный за границу. Операция впервые обнажила факт существования конкурирующих организаций, осведомлённых об аномальной деятельности в регионе.</p>
+
+        <div class="spec-list">
+          <div class="spec-item">
+            <div class="spec-key">Миссия</div>
+            <div class="spec-val">Обнаружение и возврат артефакта [НАЗВАНИЕ ЗАСЕКРЕЧЕНО]. Нейтрализация курьерской сети противника.</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Проблема</div>
+            <div class="spec-val">В ходе операции установлено, что конкурирующая структура располагает информацией о методах UFD. Источник утечки не определён.</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Итог</div>
+            <div class="spec-val">Курьерская сеть нейтрализована. Артефакт не обнаружен — предположительно передан третьей стороне до начала операции. Файл переведён в статус «Активное расследование».</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OP: OMEGA DAWN -->
+    <div class="op-block">
+      <div class="op-head" onclick="toggle(this)">
+        <span class="op-num">ОП-2033-09</span>
+        <span class="op-title">«Рассвет Омеги»</span>
+        <span class="op-badge badge-blue">В архиве · Научная миссия</span>
+      </div>
+      <div class="op-body">
+        <div class="info-grid">
+          <div class="ig-cell">
+            <div class="ig-label">Задействованы</div>
+            <div class="ig-value yellow">ИО-Ω + КМП + GRP</div>
+          </div>
+          <div class="ig-cell">
+            <div class="ig-label">Цель</div>
+            <div class="ig-value">Исследование аномальной зоны · Подземные лаборатории</div>
+          </div>
+        </div>
+
+        <p>Научно-исследовательская операция в подземных комплексах, обнаруженных группой «Призрак» в ходе ОП-2033-04. Отдел «Омега» направил полевую группу для изучения оборудования предположительно советского периода, задействованного в аномальных экспериментах.</p>
+
+        <div class="spec-list">
+          <div class="spec-item">
+            <div class="spec-key">Находки</div>
+            <div class="spec-val">Обнаружены журналы экспериментов датированные 1978–1991 гг. Часть оборудования до сих пор функционирует. Зафиксированы биологические аномалии на нижних уровнях.</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">КМП</div>
+            <div class="spec-val">Медицинский корпус задействован после контакта двух операторов с неизвестным веществом. Оба стабилизированы. Симптомы под наблюдением.</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-key">Итог</div>
+            <div class="spec-val">Комплекс опечатан. Все находки переданы в главный архив «Омеги». Уровень угрозы объекта повышен до «Жёлтый».</div>
+          </div>
+        </div>
+
+        <blockquote>
+          <p>«То, что они пытались сделать здесь 50 лет назад — мы должны это изучить. Потому что кто-то другой снова пытается это повторить.»</p>
+          <cite>— Руководитель группы ИО-Ω, полевой отчёт ОП-2033-09</cite>
+        </blockquote>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TECH -->
+<section id="tech">
+  <div class="container">
+    <div class="section-eyebrow">Арсенал · Засекреченные разработки</div>
+    <h2 class="section-title">Технологическое Оснащение</h2>
+
+    <p>Каждое подразделение UFD располагает собственным засекреченным технологическим комплексом, разработанным или адаптированным Исследовательским Отделом «Омега». Все образцы недоступны для стандартных армейских структур.</p>
+
+    <!-- SAD -->
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Штурмовики «Дельта» — Комплекс «Тяжёлый Рубеж»</span>
+        <span class="div-tag">SAD · Тяжёлое наступательное снаряжение</span>
+      </div>
+      <div class="div-body">
+        <div class="units-grid" style="grid-template-columns: repeat(2,1fr); margin: 0;">
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Броня · Экзоскелет</div>
+            <div class="uc-name">«Титан-А»</div>
+            <div class="uc-desc">Тяжёлый экзоскелет с интегрированными композитными пластинами. Работает на компактном аномальном ядре — боец без усилий переносит оружие калибра 12,7 мм и выдерживает прямое попадание гранаты.</div>
+          </div>
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Вооружение · Основное</div>
+            <div class="uc-name">Винтовка «Шквал-М»</div>
+            <div class="uc-desc">Магнитоимпульсный автомат (гаусс-пушка). Использует кинетическую энергию для разгона тяжёлых вольфрамовых патронов. Пробивает любой лёгкий бронежилет и разрушительно действует на физические аномалии.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OCS -->
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Отдел «Чёрная Сигнализация» — Комплекс «НейроСетка»</span>
+        <span class="div-tag">OCS · Кибернетическое и электронное вооружение</span>
+      </div>
+      <div class="div-body">
+        <div class="units-grid" style="grid-template-columns: repeat(2,1fr); margin: 0;">
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Кибер-оборудование</div>
+            <div class="uc-name">Кибер-дека «Чернец»</div>
+            <div class="uc-desc">Портативный квантовый компьютер, подключающийся напрямую к нервной системе оператора через нейроинтерфейс. Взламывает зашифрованные военные спутники за секунды и перехватывает управление вражескими дронами прямо в бою.</div>
+          </div>
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Программное оружие</div>
+            <div class="uc-name">Вирус «Призрачный Сбой»</div>
+            <div class="uc-desc">Милитарный червеподобный софт, который не просто стирает данные, а физически сжигает платы вражеской техники путём критической перегрузки электросетей. Бесследно. Необратимо.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OMEGA -->
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Исследователи «Омега» — Комплекс «Прометей»</span>
+        <span class="div-tag">ИО-Ω · Аномальное оборудование</span>
+      </div>
+      <div class="div-body">
+        <div class="units-grid" style="grid-template-columns: repeat(2,1fr); margin: 0;">
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Детектор · Аномалий</div>
+            <div class="uc-name">Детектор «Вий»</div>
+            <div class="uc-desc">Модернизированный счётчик Гейгера, настроенный на фиксацию искривлений пространства и времени. Предупреждает о формировании смертоносных аномалий за несколько минут до их появления.</div>
+          </div>
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Полевое устройство</div>
+            <div class="uc-name">Генератор «Клетка»</div>
+            <div class="uc-desc">Портативное устройство, создающее направленное магнитно-гравитационное поле. Способно «заморозить» и стабилизировать аномальную зону на короткое время — достаточно, чтобы штурмовые отряды прошли без потерь.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDICAL -->
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Корпус Медпомощи — Комплекс «Нектар»</span>
+        <span class="div-tag">КМП · Полевая медицина и биозащита</span>
+      </div>
+      <div class="div-body">
+        <div class="units-grid" style="grid-template-columns: repeat(2,1fr); margin: 0;">
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Медицинский препарат</div>
+            <div class="uc-name">Био-гель «Реген-6»</div>
+            <div class="uc-desc">Синтетический медицинский полимер быстрого действия. Заполняет рваные раны, мгновенно останавливает артериальное кровотечение, обеззараживает и стимулирует ускоренное деление клеток. Боец возвращается в строй за минуты.</div>
+          </div>
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Антидот · Универсальный</div>
+            <div class="uc-name">Сыворотка «Анти-Доза»</div>
+            <div class="uc-desc">Универсальный антидот против биологического оружия массового поражения и аномальных мутагенов. Блокирует разрушение ДНК на ранних стадиях заражения.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GHOST -->
+    <div class="div-block">
+      <div class="div-header">
+        <span class="div-name">Разведка «Призрак» — Комплекс «Морфей»</span>
+        <span class="div-tag">GRP · Скрытное снаряжение</span>
+      </div>
+      <div class="div-body">
+        <div class="units-grid" style="grid-template-columns: repeat(2,1fr); margin: 0;">
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Маскировка · Полная</div>
+            <div class="uc-name">Костюм «Тень-3»</div>
+            <div class="uc-desc">Тактический комбинезон с покрытием из жидких кристаллов. Полностью поглощает свет, тепловое излучение и радиоволны. Боец становится на 100% невидимым для тепловизоров и радаров.</div>
+          </div>
+          <div class="unit-card" style="padding:18px;">
+            <div class="uc-code">Холодное оружие</div>
+            <div class="uc-name">Сенсорный нож «Жало»</div>
+            <div class="uc-desc">Лезвие с мономолекулярной заточкой, покрытое слоем стабилизированного аномального распада. При погружении в цель мгновенно разрушает органические и механические связи на молекулярном уровне — бесшумно и бесследно.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Комплекс</th>
+          <th>Единица</th>
+          <th>Тип</th>
+          <th>Уровень угрозы для противника</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill yellow">Тяжёлый Рубеж</span></td>
+          <td>«Титан-А» + «Шквал-М»</td>
+          <td>Броня / Оружие</td>
+          <td style="color:var(--red);">Критический</td>
+        </tr>
+        <tr>
+          <td><span class="pill blue">НейроСетка</span></td>
+          <td>«Чернец» + «Призрачный Сбой»</td>
+          <td>Кибер / Электронное</td>
+          <td style="color:var(--red);">Критический</td>
+        </tr>
+        <tr>
+          <td><span class="pill yellow">Прометей</span></td>
+          <td>«Вий» + «Клетка»</td>
+          <td>Аномальное / Научное</td>
+          <td style="color:var(--amber);">Высокий</td>
+        </tr>
+        <tr>
+          <td><span class="pill">Нектар</span></td>
+          <td>«Реген-6» + «Анти-Доза»</td>
+          <td>Медицинское</td>
+          <td style="color:var(--green-bright);">Поддержка</td>
+        </tr>
+        <tr>
+          <td><span class="pill">Морфей</span></td>
+          <td>«Тень-3» + «Жало»</td>
+          <td>Маскировка / Оружие</td>
+          <td style="color:var(--red);">Критический</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">UFD · Ukraine Force Delta</div>
+  <div class="footer-code">Совершенно секретно · Уровень «Дельта» · Для гражданских — не существует</div>
+  <div class="footer-stripe"></div>
+</footer>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+</script>
+</body>
+</html>
